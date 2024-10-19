@@ -129,3 +129,31 @@ h3 {
     font-size: 18px;
     margin-top: 10px;
 }
+
+.bottomBox {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.card {
+    border: 2px solid black;
+    padding: 10px;
+    color: black;
+    background-color: #bdd0ea;
+    text-decoration: none;
+}
+
+.card h2 {
+    font-size: 25px;
+}
+
+.card h4 {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.card img {
+    margin-top: 10px;
+    max-width: 70px;
+}
