@@ -2,17 +2,12 @@ const inputField = document.querySelector(".inputField");
 const searchWeatherBtn = document.querySelector(".searchBtn");
 const weatherDisplayTop = document.querySelector(".topBox");
 const forecastDisplayBottom = document.querySelector(".bottomBox");
+const locationWeatherBtn = document.querySelector(".locationBtn");
 
 
 const apiKey = "13d472083a14db983ea3e246a52880e3";
 
 searchWeatherBtn.addEventListener("click", findCityCoordinates);
-
-
-
-
-
-
 
 
 async function findCityCoordinates() {
@@ -36,9 +31,6 @@ async function findCityCoordinates() {
         alert("Failed to fetch coordinates. Please try again.");
     }
 };
-
-
-
 
 
 async function getForecast (cityName, latitude, longitude) {
@@ -79,9 +71,6 @@ async function getForecast (cityName, latitude, longitude) {
 };
 
 
-
-
-
 const generateWeatherCard = (city, weatherData, dayIndex) => {
     if(dayIndex === 0) {
         return `<div class="weather-details">
@@ -105,3 +94,35 @@ const generateWeatherCard = (city, weatherData, dayIndex) => {
                 </div>`;
     }
 }
+
+
+locationWeatherBtn.addEventListener("click", findUserLocationWeather);
+
+
+
+async function findUserLocationWeather () {
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+
+        const { latitude, longitude } = position.coords;
+
+        const reverseGeoAPI = `http://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`;
+        
+        const response = await fetch(reverseGeoAPI);
+        const userData = await response.json();
+
+        const { name } = userData[0];
+
+        getForecast(name, latitude, longitude);
+
+    } catch (error) {
+        if (error.code === error.PERMISSION_DENIED) {
+            alert("Location permission denied. Please enable location access.");
+        } else {
+            alert("Error fetching location or weather data!");
+        }
+    }
+};
+
