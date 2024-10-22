@@ -1,5 +1,8 @@
 const inputField = document.querySelector(".inputField");
 const searchWeatherBtn = document.querySelector(".searchBtn");
+const weatherDisplayTop = document.querySelector(".topBox");
+const forecastDisplayBottom = document.querySelector(".bottomBox");
+
 
 const apiKey = "13d472083a14db983ea3e246a52880e3";
 
@@ -59,18 +62,46 @@ async function getForecast (cityName, latitude, longitude) {
 
         console.log(filteredData);
 
-        /*inputField.value = "";
+        inputField.value = "";
         weatherDisplayTop.innerHTML = "";
-        forecastDisplayBottom.innerHTML = "";*/
+        forecastDisplayBottom.innerHTML = "";
 
         filteredData.forEach((forecastItem, idx) => {
-            /*if (idx === 0) {
+            if (idx === 0) {
                 weatherDisplayTop.insertAdjacentHTML("beforeend", generateWeatherCard(cityName, forecastItem, idx));
             } else {
                 forecastDisplayBottom.insertAdjacentHTML("beforeend", generateWeatherCard(cityName, forecastItem, idx));
-            }*/
+            }
         });
     } catch (error) {
         alert("Error fetching weather data!");
     }
 };
+
+
+
+
+
+const generateWeatherCard = (city, weatherData, dayIndex) => {
+    if(dayIndex === 0) {
+        return `<div class="weather-details">
+                    <h2>${city} (${weatherData.dt_txt.split(" ")[0]})</h2>
+                    <h4>Temperature: ${weatherData.main.temp}°C</h4>
+                    <h4>Wind: ${weatherData.wind.speed} M/S</h4>
+                    <h4>Humidity: ${weatherData.main.humidity}%</h4>
+                </div>
+                <div class="weather-icon">
+                    <img src="https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@4x.png" alt="weather-img">
+                    <!--<img src="https://static.vecteezy.com/system/resources/previews/024/825/182/original/3d-weather-icon-day-with-rain-free-png.png" alt="">-->
+                    <h4>${weatherData.weather[0].description}</h4>
+                </div>`;
+    }else {
+        return `<div class="card">
+                    <h2>(${weatherData.dt_txt.split(" ")[0]})</h2>
+                    <img src="https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png" alt="weather-img">
+                    <h4>Temp: ${weatherData.main.temp}°C</h4>
+                    <h4>Wind: ${weatherData.wind.speed} M/S</h4>
+                    <h4>Humidity: ${weatherData.main.humidity}%</h4>
+                </div>`;
+    }
+}
