@@ -7,11 +7,26 @@ const locationWeatherBtn = document.querySelector(".locationBtn");
 
 const apiKey = "13d472083a14db983ea3e246a52880e3";
 
-searchWeatherBtn.addEventListener("click", findCityCoordinates);
+
+// Function to validate the input
+function validateInput(city) {
+    if (!city || city.length < 3) {
+        alert("Please enter a valid city name.");
+        return false;
+    }
+    return true;
+}
 
 
-async function findCityCoordinates() {
+searchWeatherBtn.addEventListener("click", () => {
     const inputCity = inputField.value.trim();
+    if (validateInput(inputCity)) {
+        findCityCoordinates(inputCity);  // Pass the city name to the function
+    }
+});
+
+
+async function findCityCoordinates(inputCity) {
     if (!inputCity) return;
 
     const geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${inputCity}&limit=1&appid=${apiKey}`;
