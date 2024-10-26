@@ -21,11 +21,11 @@ function validateInput(city) {
 searchWeatherBtn.addEventListener("click", () => {
     const inputCity = inputField.value.trim();
     if (validateInput(inputCity)) {
-        findCityCoordinates(inputCity);  // Pass the city name to the function
+        findCityCoordinates(inputCity); 
     }
 });
 
-
+// function to find city using city name and coordinates
 async function findCityCoordinates(inputCity) {
     if (!inputCity) return;
 
@@ -47,7 +47,7 @@ async function findCityCoordinates(inputCity) {
     }
 };
 
-
+// Function to get weather forecast
 async function getForecast (cityName, latitude, longitude) {
     
     const weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
@@ -85,7 +85,7 @@ async function getForecast (cityName, latitude, longitude) {
     }
 };
 
-
+// Function to disolay weather on the UI
 const generateWeatherCard = (city, weatherData, dayIndex) => {
     if(dayIndex === 0) {
         return `<div class="weather-details">
@@ -110,11 +110,11 @@ const generateWeatherCard = (city, weatherData, dayIndex) => {
     }
 }
 
-
+// Checking weather using user's current location
 locationWeatherBtn.addEventListener("click", findUserLocationWeather);
 
 
-
+// Function to get user's current location
 async function findUserLocationWeather () {
     try {
         const position = await new Promise((resolve, reject) => {
