@@ -1,5 +1,6 @@
 const inputField = document.querySelector(".inputField");
 const searchWeatherBtn = document.querySelector(".searchBtn");
+const recentCitiesDropdown = document.querySelector("#recent-cities");
 const weatherDisplayTop = document.querySelector(".topBox");
 const forecastDisplayBottom = document.querySelector(".bottomBox");
 const locationWeatherBtn = document.querySelector(".locationBtn");
@@ -21,9 +22,32 @@ function validateInput(city) {
 searchWeatherBtn.addEventListener("click", () => {
     const inputCity = inputField.value.trim();
     if (validateInput(inputCity)) {
+        saveCity(inputCity);          // Save city to localStorage
+        updateRecentCitiesDropdown(); // Update the dropdown
         findCityCoordinates(inputCity); 
     }
 });
+
+
+// Save searched city to localStorage
+function saveCity(city) {
+    let recentCities = JSON.parse(localStorage.getItem('recentCities')) || [];
+    if (!recentCities.includes(city)) {
+        recentCities.push(city);
+        localStorage.setItem('recentCities', JSON.stringify(recentCities));
+    }
+}
+
+// Update the dropdown menu with recently searched cities
+function updateRecentCitiesDropdown() {
+    const recentCities = JSON.parse(localStorage.getItem('recentCities')) || [];
+    recentCitiesDropdown.innerHTML = recentCities
+        .map(city => `<option value="${city}"></option>`)
+        .join('');
+}
+
+
+
 
 // function to find city using city name and coordinates
 async function findCityCoordinates(inputCity) {
@@ -110,6 +134,9 @@ const generateWeatherCard = (city, weatherData, dayIndex) => {
     }
 }
 
+
+
+
 // Checking weather using user's current location
 locationWeatherBtn.addEventListener("click", findUserLocationWeather);
 
@@ -141,3 +168,10 @@ async function findUserLocationWeather () {
     }
 };
 
+
+// Initial load to clear dropdown and update it after searches are added
+document.addEventListener("DOMContentLoaded", () => {
+    // Clear recent cities on reload
+    localStorage.removeItem('recentCities');
+    updateRecentCitiesDropdown(); // Set up an empty dropdown on load
+});
